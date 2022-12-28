@@ -4,6 +4,7 @@ import com.jiahongw.wantee.gateway.WebpageGateway;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,11 @@ public class WebpageService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebpageService.class);
 
-    private static final String GET_URL_TITLE_PATTERN = "(<title>|<TITLE>)(.*?)(</title>|</TITLE>)";
+    private static final Pattern NORMAL_PAGE_TITLE_PATTERN = Pattern
+        .compile("(<title>|<TITLE>)(.*?)(</title>|</TITLE>)", Pattern.DOTALL);
+
+    private static final Pattern WX_PAGE_TITLE_PATTERN = Pattern
+        .compile("<.*?rich_media_title.*?>(.*?)<.*?>", Pattern.DOTALL);
 
     @Resource
     private WebpageGateway webpageGateway;
@@ -27,11 +32,22 @@ public class WebpageService {
     public String getWebPageContentTitle(String url) {
         try {
             String content = webpageGateway.getContentByUrl(url);
-            Pattern r = Pattern.compile(GET_URL_TITLE_PATTERN);
-            Matcher m = r.matcher(content);
-
-            if (m.find()) {
-                return m.group(2).toString();
+            Matcher normalMatcher = NORMAL_PAGE_TITLE_PATTERN.matcher(content);
+            String title = "";
+            // 普通文章
+            if (normalMatcher.find()) {
+                title = normalMatcher.group(2).trim();
+                if (StringUtils.isNotEmpty(title)) {
+                    return title;
+                }
+            }
+            // 微信文章解析title
+            Matcher wxMatcher = WX_PAGE_TITLE_PATTERN.matcher(content);
+            if (wxMatcher.find()) {
+                title = wxMatcher.group(1).trim();
+                if (StringUtils.isNotEmpty(title)) {
+                    return title;
+                }
             }
         } catch (Exception e) {
             LOGGER.error("getWebPageContentTitle error, url:{}", url, e);
