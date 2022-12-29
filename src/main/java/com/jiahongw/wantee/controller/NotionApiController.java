@@ -4,6 +4,7 @@ import com.jiahongw.wantee.controller.request.CreateNotionCardBoxPageRequest;
 import com.jiahongw.wantee.service.NotionService;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,8 +33,10 @@ public class NotionApiController implements ErrorController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/createNotionCardBoxPage")
     public String createNotionCardBoxPage(@RequestBody CreateNotionCardBoxPageRequest request) {
-        String result = notionService.createNotionCardBoxPageByShortcuts(request.getLink());
-        return result;
+        if (StringUtils.isNotEmpty(request.getTitle())) {
+            return notionService.createNotionCardBoxPageByShortcuts(request.getLink(),request.getTitle());
+        }
+        return notionService.createNotionCardBoxPageByShortcuts(request.getLink());
     }
 
     /**

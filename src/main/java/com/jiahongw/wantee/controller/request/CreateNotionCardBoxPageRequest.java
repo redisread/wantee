@@ -17,4 +17,9 @@ public class CreateNotionCardBoxPageRequest {
      * 网页链接
      */
     private String link;
+
+    /**
+     * 页面标题
+     */
+    private String title;
 }
