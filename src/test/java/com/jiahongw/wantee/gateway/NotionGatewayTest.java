@@ -1,15 +1,6 @@
 package com.jiahongw.wantee.gateway;
 
 import com.jiahongw.wantee.BaseTest;
-import com.jiahongw.wantee.model.NotionCardBoxDatabaseModel;
-import com.jiahongw.wantee.model.NotionCardBoxDatabaseModel.PropertiesDTO.CardTypeDTO.SelectDTO.OptionsDTO;
-import com.jiahongw.wantee.model.NotionPage;
-import com.jiahongw.wantee.util.JsonUtils;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.annotation.Resource;
-import org.asynchttpclient.Response;
-import org.junit.Test;
 
 public class NotionGatewayTest extends BaseTest {
 //
