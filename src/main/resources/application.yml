@@ -1,0 +1,17 @@
+jasypt:
+  encryptor:
+    password: VictorHong  #加密的密钥
+    algorithm: PBEWithMD5AndDES  #指定解密算法
+
+notion:
+  infos:
+    # 卡片盒笔记数据库id
+    card-box-database-id: ENC(fXZKuIDOOisVJ338ehohA4BT+IlFoAQe71m/IBqI1lj89KHOOgGUZGRdaDA2Pm3uVk+zi/8I7J0=)
+    # Jasypt加密，格式为ENC(加密结果)
+    token: ENC(YlTaxGKi7irPceIgjOU/tlG/Kk7ZWOdiiYPO19cY2z5HDY20f+lRHUa3x5zZKLDNMa6MLuyKaqfqAh9yuEmmivkw2expDMIFNb5qfbaka0o=)
+    # Notion Page 操作URL
+    page-url: https://api.notion.com/v1/pages
+    # Notion Database 操作URL
+    database-url: https://api.notion.com/v1/databases
+    # Notion 版本
+    version: 2022-06-28
