@@ -5,6 +5,7 @@ import org.asynchttpclient.DefaultAsyncHttpClient;
 import org.asynchttpclient.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,12 +21,35 @@ public class NotionGateway {
 
     private static final AsyncHttpClient notionClient = new DefaultAsyncHttpClient();
 
-    private static final String NOTION_TOKEN = "Bearer secret_dBdkIIPXAnbM1IAQLNMd9cg6cUbfPXy0wFezX5XEEud";
+    /**
+     * Notion api 访问token
+     */
+    @Value("${notion.infos.token}")
+    private String notionApiToken;
+
+    /**
+     * 卡片盒笔记数据库id
+     */
+    @Value("${notion.infos.card-box-database-id}")
+    private String notionCardBoxDatabaseId;
 
     /**
      * Notion页面操作URL，包括创建页面、删除页面、更新页面、查询页面
      */
-    private static final String NOTION_PAGE_URL = "https://api.notion.com/v1/pages";
+    @Value("${notion.infos.page-url}")
+    private String notionPageUrl;
+
+    /**
+     * Notion数据库操作URL
+     */
+    @Value("${notion.infos.database-url}")
+    private String notionDatabaseUrl;
+
+    /**
+     * Notion数据库操作URL
+     */
+    @Value("${notion.infos.version}")
+    private String notionVersion;
 
     /**
      * 查询页面
@@ -36,10 +60,10 @@ public class NotionGateway {
     public String queryPage(String pageId) {
         try {
             Response response = notionClient
-                .prepare("GET", NOTION_PAGE_URL + "/" + pageId)
+                .prepare("GET", notionPageUrl + "/" + pageId)
                 .setHeader("accept", "application/json")
-                .setHeader("Notion-Version", "2022-06-28")
-                .setHeader("Authorization", NOTION_TOKEN)
+                .setHeader("Notion-Version", notionVersion)
+                .setHeader("Authorization", notionApiToken)
                 .execute()
                 .toCompletableFuture()
                 .get();
@@ -60,11 +84,11 @@ public class NotionGateway {
     public String updatePage(String pageId, String updateBody) {
         try {
             Response response = notionClient
-                .prepare("PATCH", NOTION_PAGE_URL + "/" + pageId)
+                .prepare("PATCH", notionPageUrl + "/" + pageId)
                 .setHeader("accept", "application/json")
-                .setHeader("Notion-Version", "2022-06-28")
+                .setHeader("Notion-Version", notionVersion)
                 .setHeader("content-type", "application/json")
-                .setHeader("Authorization", NOTION_TOKEN)
+                .setHeader("Authorization", notionApiToken)
                 .setBody(updateBody)
                 .execute()
                 .get();
@@ -81,20 +105,42 @@ public class NotionGateway {
      * @param createBody 创建内容
      * @return
      */
-    public String createPage(String createBody) {
+    public Response createPage(String createBody) {
         try {
             Response response = notionClient
-                .prepare("POST", NOTION_PAGE_URL)
+                .prepare("POST", notionPageUrl)
                 .setHeader("accept", "application/json")
-                .setHeader("Notion-Version", "2022-06-28")
+                .setHeader("Notion-Version", notionVersion)
                 .setHeader("content-type", "application/json")
-                .setHeader("Authorization", NOTION_TOKEN)
+                .setHeader("Authorization", notionApiToken)
                 .setBody(createBody)
+                .execute()
+                .get();
+            return response;
+        } catch (Exception e) {
+            LOGGER.error("createPage Error,createBody:{}", createBody, e);
+        }
+        return null;
+    }
+
+    /**
+     * 查询数据库信息
+     *
+     * @param databaseId 数据库id
+     * @return
+     */
+    public String queryDatabase(String databaseId) {
+        try {
+            Response response = notionClient
+                .prepare("GET", notionDatabaseUrl + "/" + databaseId)
+                .setHeader("accept", "application/json")
+                .setHeader("Notion-Version", notionVersion)
+                .setHeader("Authorization", notionApiToken)
                 .execute()
                 .get();
             return response.getResponseBody();
         } catch (Exception e) {
-            LOGGER.error("createPage Error,createBody:{}", createBody, e);
+            LOGGER.error("queryDatabase Error,databaseId:{}", databaseId, e);
         }
         return "";
     }
