@@ -1,8 +1,10 @@
 package com.jiahongw.wantee.model.notion;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -14,6 +16,8 @@ import org.springframework.http.HttpStatus;
 @Data
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class CreatePageResultModel {
 
     /**
