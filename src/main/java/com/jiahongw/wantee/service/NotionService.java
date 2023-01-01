@@ -1,8 +1,17 @@
 package com.jiahongw.wantee.service;
 
+import com.jiahongw.wantee.controller.request.CreateNotionCardBoxPageRequest;
 import com.jiahongw.wantee.gateway.NotionGateway;
+import com.jiahongw.wantee.model.notion.CreateCardBoxPageModel;
 import com.jiahongw.wantee.model.notion.CreatePageResultModel;
+import com.jiahongw.wantee.model.notion.OptionModel;
+import com.jiahongw.wantee.model.notion.SelectModel;
 import com.jiahongw.wantee.util.JsoupUtils;
+import com.jiahongw.wantee.util.NotionParseUtils;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -32,33 +41,54 @@ public class NotionService {
     @Value("${notion.infos.card-box-database-id}")
     private String notionCardBoxDatabaseId;
 
+    private static String CARD_BOX_PAGE_CREATE_INFO = "{\"parent\":{\"database_id\":\"%s\"},\"properties\":{\"Name\":{\"title\":[{\"text\":{\"content\":\"%s\"}}]},\"类型\":{\"select\":{\"name\":\"%s\"}},\"卡片类型\":{\"select\":{\"name\":\"文献笔记\"}},\"URL\":{\"url\":\"%s\"}}}";
+
     /**
      * 通过IOS快捷指令创建Notion卡片盒笔记
-     *
-     * @param url
      */
-    public CreatePageResultModel createNotionCardBoxPageByShortcuts(String url) {
-        String title = JsoupUtils.getTitleByUrl(url);
-        if (StringUtils.isEmpty(title)) {
-            title = UNKNOWN_TITLE;
-        }
-        return createNotionCardBoxPageByShortcuts(url,title);
-    }
-
-    public CreatePageResultModel createNotionCardBoxPageByShortcuts(String url, String title) {
+    public CreatePageResultModel createNotionCardBoxPageByShortcuts(
+        CreateNotionCardBoxPageRequest cardBoxPageRequest) {
         CreatePageResultModel createPageResultModel = new CreatePageResultModel();
-        String createBody = buildCreateBody(url, title);
+        CreateCardBoxPageModel createCardBoxPageModel = buildCreateCardBoxPageModel(
+            cardBoxPageRequest);
+        String createBody = String
+            .format(CARD_BOX_PAGE_CREATE_INFO, notionCardBoxDatabaseId,
+                createCardBoxPageModel.getTitle(), createCardBoxPageModel.getType(),
+                createCardBoxPageModel.getUrl());
         Response response = notionGateway.createPage(createBody);
-        createPageResultModel.setTitle(title);
+        createPageResultModel.setTitle(createCardBoxPageModel.getTitle());
         createPageResultModel.setHttpStatus(HttpStatus.resolve(response.getStatusCode()));
         return createPageResultModel;
     }
 
-    private String buildCreateBody(String url, String title) {
-        String createInfo = "{\"parent\":{\"database_id\":\"%s\"},\"properties\":{\"Name\":{\"title\":[{\"text\":{\"content\":\"%S\"}}]},\"类型\":{\"select\":{\"name\":\"文章\"}},\"卡片类型\":{\"select\":{\"name\":\"文献笔记\"}},\"URL\":{\"url\":\"%s\"}}}";
-        String createBody = String.format(createInfo, notionCardBoxDatabaseId, title, url);
-        return createBody;
+    private CreateCardBoxPageModel buildCreateCardBoxPageModel(
+        CreateNotionCardBoxPageRequest request) {
+        CreateCardBoxPageModel createCardBoxPageModel = new CreateCardBoxPageModel();
+        String title = JsoupUtils.getTitleByUrl(request.getLink());
+        String type = StringUtils.isNotEmpty(request.getType()) ? request.getType() : "文章";
+        createCardBoxPageModel.setUrl(request.getLink());
+        createCardBoxPageModel.setTitle(title);
+        createCardBoxPageModel.setType(type);
+        return createCardBoxPageModel;
     }
 
-
+    /**
+     * 获取选择属性名称的列表
+     *
+     * @param propertyName
+     * @return
+     */
+    public List<String> queryNotionCardBoxSelectPropertyNames(String propertyName) {
+        String databaseJsonText = notionGateway.queryDatabase(notionCardBoxDatabaseId);
+        SelectModel selectModel = NotionParseUtils
+            .getSelectModelByPropertyName(databaseJsonText, propertyName);
+        if (Objects.isNull(selectModel) || Objects.isNull(selectModel.getOptions())) {
+            return Collections.emptyList();
+        }
+        return selectModel.getOptions()
+            .stream()
+            .map(OptionModel::getName)
+            .distinct()
+            .collect(Collectors.toList());
+    }
 }
