@@ -1,8 +1,10 @@
 package com.jiahongw.wantee.controller;
 
 import com.jiahongw.wantee.controller.request.CreateNotionCardBoxPageRequest;
+import com.jiahongw.wantee.controller.response.WebBaseResponse;
 import com.jiahongw.wantee.model.notion.CreatePageResultModel;
 import com.jiahongw.wantee.service.NotionService;
+import java.util.List;
 import java.util.Objects;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -36,15 +38,7 @@ public class NotionApiController implements ErrorController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/createNotionCardBoxPage")
     public String createNotionCardBoxPage(@RequestBody CreateNotionCardBoxPageRequest request) {
-        CreatePageResultModel createPageResultModel = null;
-        if (StringUtils.isNotEmpty(request.getTitle())) {
-            createPageResultModel = notionService
-                .createNotionCardBoxPageByShortcuts(request.getLink(), request.getTitle());
-        } else {
-            createPageResultModel = notionService
-                .createNotionCardBoxPageByShortcuts(request.getLink());
-        }
-
+        CreatePageResultModel createPageResultModel = notionService.createNotionCardBoxPageByShortcuts(request);
         if (Objects.nonNull(createPageResultModel)) {
             HttpStatus httpStatus = createPageResultModel.getHttpStatus();
             if (Objects.nonNull(httpStatus)) {
@@ -57,6 +51,18 @@ public class NotionApiController implements ErrorController {
             }
         }
         return "UNKNOWN";
+    }
+
+    /**
+     * 通过属性名查询卡片盒笔记下的选择属性名列表
+     *
+     * @param propertyName 属性名
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/querySelectPropertyOptions")
+    public WebBaseResponse<List<String>> querySelectPropertyOptionsForCardBoxPage(String propertyName) {
+        List<String> names = notionService.queryNotionCardBoxSelectPropertyNames(propertyName);
+        return WebBaseResponse.success(names);
     }
 
     /**
