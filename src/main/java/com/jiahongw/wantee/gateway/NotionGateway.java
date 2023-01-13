@@ -1,11 +1,17 @@
 package com.jiahongw.wantee.gateway;
 
+import com.jiahongw.wantee.constant.enums.BizExceptionCodeEnum;
+import com.jiahongw.wantee.exception.BizException;
+import java.util.Objects;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.DefaultAsyncHttpClient;
 import org.asynchttpclient.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -105,6 +111,8 @@ public class NotionGateway {
      * @param createBody 创建内容
      * @return
      */
+    @Retryable(value = BizException.class, maxAttempts = 2,
+        backoff= @Backoff(value = 1500, maxDelay = 100000, multiplier = 1.2))
     public Response createPage(String createBody) {
         try {
             Response response = notionClient
@@ -116,11 +124,14 @@ public class NotionGateway {
                 .setBody(createBody)
                 .execute()
                 .get();
+            if (Objects.isNull(response) || response.getStatusCode() != HttpStatus.OK.value()) {
+                throw new BizException(BizExceptionCodeEnum.CREATE_NOTION_PAGE_EXCEPTION);
+            }
             return response;
         } catch (Exception e) {
             LOGGER.error("createPage Error,createBody:{}", createBody, e);
+            throw new BizException(BizExceptionCodeEnum.CREATE_NOTION_PAGE_EXCEPTION);
         }
-        return null;
     }
 
     /**
