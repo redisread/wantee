@@ -38,17 +38,23 @@ public class NotionApiController implements ErrorController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/createNotionCardBoxPage")
     public String createNotionCardBoxPage(@RequestBody CreateNotionCardBoxPageRequest request) {
-        CreatePageResultModel createPageResultModel = notionService.createNotionCardBoxPageByShortcuts(request);
-        if (Objects.nonNull(createPageResultModel)) {
-            HttpStatus httpStatus = createPageResultModel.getHttpStatus();
-            if (Objects.nonNull(httpStatus)) {
-                if (HttpStatus.OK.value() == httpStatus.value()) {
-                    return String.format("保存文章[%s]成功", createPageResultModel.getTitle());
-                }
-                if (StringUtils.isNotEmpty(httpStatus.getReasonPhrase())) {
-                    return httpStatus.getReasonPhrase();
+        try {
+            CreatePageResultModel createPageResultModel = notionService
+                .createNotionCardBoxPageByShortcuts(request);
+            if (Objects.nonNull(createPageResultModel)) {
+                HttpStatus httpStatus = createPageResultModel.getHttpStatus();
+                if (Objects.nonNull(httpStatus)) {
+                    if (HttpStatus.OK.value() == httpStatus.value()) {
+                        return String.format("保存文章[%s]成功", createPageResultModel.getTitle());
+                    }
+                    if (StringUtils.isNotEmpty(httpStatus.getReasonPhrase())) {
+                        return httpStatus.getReasonPhrase();
+                    }
                 }
             }
+        } catch (Exception e) {
+            log.error("createNotionCardBoxPage error",e);
+            return e.getMessage();
         }
         return "UNKNOWN";
     }
