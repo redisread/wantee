@@ -1,20 +1,24 @@
 package com.jiahongw.wantee.gateway;
 
 import com.jiahongw.wantee.BaseTest;
+import com.jiahongw.wantee.model.NotionPage;
+import com.jiahongw.wantee.util.JsonUtils;
+import javax.annotation.Resource;
+import org.junit.Test;
 
 public class NotionGatewayTest extends BaseTest {
-//
-//    @Resource
-//    private NotionGateway notionGateway;
-//
-//    @Test
-//    public void testQueryPage() {
-//        String pageId = "c866a45c96b049488c87c37f1e0d73dd";
-//        String result = notionGateway.queryPage(pageId);
-//        NotionPage notionPage = JsonUtils.fromJson(result, NotionPage.class);
-//        System.out.println(result);
-//        System.out.println(notionPage);
-//    }
+
+    @Resource
+    private NotionGateway notionGateway;
+
+    @Test
+    public void testQueryPage() {
+        String pageId = "c866a45c96b049488c87c37f1e0d73dd";
+        String result = notionGateway.queryPage(pageId);
+        NotionPage notionPage = JsonUtils.fromJson(result, NotionPage.class);
+        System.out.println(result);
+        System.out.println(notionPage);
+    }
 //
 //    @Test
 //    public void testUpdatePage() {
