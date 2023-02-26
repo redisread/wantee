@@ -1,6 +1,7 @@
 package com.jiahongw.wantee.util;
 
 
+import com.alibaba.fastjson2.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -9,6 +10,7 @@ import com.google.gson.JsonParser;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Json 序列化工具
@@ -87,6 +89,21 @@ public class JsonUtils {
             return null;
         }
     }
+
+
+
+    /**
+     * 获取Json字符串内部某个属性
+     *
+     * @param jsonText
+     * @param propertyName
+     * @return
+     */
+    public static JSONObject getPropertyJSONObject(String jsonText, String propertyName) {
+        JSONObject databaseObject = JSONObject.parseObject(jsonText);
+        return (JSONObject) databaseObject.get(propertyName);
+    }
+
 
 }
 

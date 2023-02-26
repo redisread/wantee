@@ -1,0 +1,9 @@
+spring:
+  #数据库配置
+  datasource:
+    username: victor
+    # todo:换成加密
+    password: 19981022
+    url: jdbc:mysql://114.116.242.58:3306/wattee_test?characterEncoding=UTF-8&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource

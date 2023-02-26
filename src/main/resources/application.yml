@@ -1,3 +1,5 @@
+# 公共属性配置文件
+
 jasypt:
   encryptor:
     password: VictorHong  #加密的密钥
@@ -15,3 +17,12 @@ notion:
     database-url: https://api.notion.com/v1/databases
     # Notion 版本
     version: 2022-06-28
+
+mybatis:
+  #  设置Mapper包路径
+  type-aliases-package: com.jiahongw.wantee.mapper
+  #  mapper-locations: mybatis/mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    default-statement-timeout: 30
