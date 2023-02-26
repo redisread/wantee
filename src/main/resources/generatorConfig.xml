@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+  <context id="DB2Tables" targetRuntime="MyBatis3">
+
+    <!-- 每次执行插件生成的 xml 时通用的方法会覆盖的 -->
+    <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
+    <!--  为生成的 Model 覆写 toString() 方法 -->
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+    <!-- 使生成的 Model 实现 Serializable 接口  -->
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+    <!--  为生成的 Model 覆写 equals() 和 hashCode() 方法 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>
+
+    <commentGenerator>
+      <property name="suppressDate" value="true"/>
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!--数据库连接信息-->
+    <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+      connectionURL="jdbc:mysql://114.116.242.58:3306/wattee_test?characterEncoding=UTF-8&amp;serverTimezone=UTC"
+      userId="victor" password="19981022">
+      <property name="nullCatalogMeansCurrent" value="true"/>
+    </jdbcConnection>
+
+    <!--生成对象类存放位置-->
+    <javaModelGenerator targetPackage="com.jiahongw.wantee.entity" targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!--生成Mapping映射文件存放位置-->
+    <sqlMapGenerator targetPackage="com.jiahongw.wantee.mapper" targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!--生成Mapper接口位置-->
+    <javaClientGenerator type="XMLMAPPER" targetPackage="com.jiahongw.wantee.mapper"
+      targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+    <!--生成对应表名和类名-->
+    <table tableName="country" domainObjectName="CountryDO" enableCountByExample="false"
+      enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+      selectByExampleQueryId="false"></table>
+  </context>
+</generatorConfiguration>
