@@ -3,17 +3,26 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>2.5.3</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
+
+  <!--  groupId 定义属于哪个组，这个组往往和项目所在的组织或公司存在关联-->
   <groupId>com.jiahongw</groupId>
+  <!-- artifactId定义了当前maven项目在组中唯一的id -->
+  <!--  “如果你的公司是mycom，有一个项目为myapp，那么groupId就应该是com.mycom.myapp” -->
   <artifactId>wantee</artifactId>
+  <!--  指定项目当前的版本-->
   <version>0.0.1-SNAPSHOT</version>
+  <!--  name元素申明一个对用户更为友好的项目名称，但不是必须得-->
   <name>wantee</name>
   <description>Spring Boot project for wantee</description>
+
+
   <properties>
     <!--  设置JDK版本 -->
     <java.version>1.8</java.version>
@@ -22,6 +31,14 @@
   </properties>
 
   <dependencies>
+
+    <!--springdoc 官方Starter-->
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-ui</artifactId>
+      <version>1.6.6</version>
+    </dependency>
+
     <!--内存数据库-->
     <dependency>
       <groupId>com.h2database</groupId>

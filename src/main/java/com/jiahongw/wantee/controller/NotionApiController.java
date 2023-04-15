@@ -4,6 +4,8 @@ import com.jiahongw.wantee.controller.request.CreateNotionCardBoxPageRequest;
 import com.jiahongw.wantee.controller.response.WebBaseResponse;
 import com.jiahongw.wantee.model.notion.CreatePageResultModel;
 import com.jiahongw.wantee.service.NotionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.Resource;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2022/12/28
  */
 @Slf4j
+@Tag(name = "NotionApiController", description = "Notion管理")
 @RestController
 @RequestMapping("/notion")
 public class NotionApiController implements ErrorController {
@@ -36,6 +39,7 @@ public class NotionApiController implements ErrorController {
      * @param request
      * @return
      */
+    @Operation(summary = "创建卡片盒笔记",description = "创建卡片盒笔记，需要token")
     @RequestMapping(method = RequestMethod.POST, value = "/createNotionCardBoxPage")
     public String createNotionCardBoxPage(@RequestBody CreateNotionCardBoxPageRequest request) {
         try {
@@ -65,6 +69,7 @@ public class NotionApiController implements ErrorController {
      * @param propertyName 属性名
      * @return
      */
+    @Operation(summary = "查询属性列表",description = "查询属性列表")
     @RequestMapping(method = RequestMethod.GET, value = "/querySelectPropertyOptions")
     public WebBaseResponse<List<String>> querySelectPropertyOptionsForCardBoxPage(String propertyName) {
         List<String> names = notionService.queryNotionCardBoxSelectPropertyNames(propertyName);
@@ -77,6 +82,7 @@ public class NotionApiController implements ErrorController {
      * @param request
      * @return
      */
+    @Operation(summary = "测试",description = "测试")
     @RequestMapping(method = RequestMethod.POST, value = "/getCreateNotionCardBoxPageRequest")
     public CreateNotionCardBoxPageRequest getCreateNotionCardBoxPageRequest(
         @RequestBody CreateNotionCardBoxPageRequest request) {
