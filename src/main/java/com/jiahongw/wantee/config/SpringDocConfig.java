@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
 public class SpringDocConfig {
 
     @Bean
-    public OpenAPI mallTinyOpenAPI() {
+    public OpenAPI wanteeOpenAPI() {
         return new OpenAPI()
             .info(new Info().title("Wantee API")
                 .description("Wantee API 演示")
@@ -35,6 +35,14 @@ public class SpringDocConfig {
         return GroupedOpenApi.builder()
             .group("notion")
             .pathsToMatch("/notion/**")
+            .build();
+    }
+
+    @Bean
+    public GroupedOpenApi noteApi() {
+        return GroupedOpenApi.builder()
+            .group("note")
+            .pathsToMatch("/note/**")
             .build();
     }
 }

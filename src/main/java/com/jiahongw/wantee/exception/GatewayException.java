@@ -1,7 +1,7 @@
 package com.jiahongw.wantee.exception;
 
 import com.google.common.base.Joiner;
-import com.jiahongw.wantee.constant.enums.GatewayExceptionCodeEnum;
+import com.jiahongw.wantee.common.enums.GatewayExceptionCodeEnum;
 
 /**
  * 网关异常

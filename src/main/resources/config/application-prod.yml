@@ -7,3 +7,19 @@ spring:
     url: jdbc:mysql://114.116.242.58:3306/wattee_test?characterEncoding=UTF-8&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
+
+#mybatis-flex:
+#  datasource:
+#    default:
+#      type: druid
+#      driverClassName: com.mysql.cj.jdbc.Driver
+#      url: jdbc:mysql://114.116.242.58:3306/wattee_test?characterEncoding=UTF-8&serverTimezone=UTC
+#      username: victor
+#      password: 19981022
+#    other:
+#      type: druid
+#      driverClassName: com.mysql.cj.jdbc.Driver
+#      url: jdbc:mysql://114.116.242.58:3306/wattee_test?characterEncoding=UTF-8&serverTimezone=UTC
+#      username: victor
+#      password: 19981022
+#  mapper-locations: classpath:/mapper/*.xml

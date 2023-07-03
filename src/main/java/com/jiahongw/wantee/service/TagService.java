@@ -1,44 +1,24 @@
 package com.jiahongw.wantee.service;
 
-import com.jiahongw.wantee.entity.TagPO;
-import com.jiahongw.wantee.mapper.TagPOMapper;
-import com.jiahongw.wantee.model.note.TagModel;
-import com.jiahongw.wantee.service.convert.TagServiceConvert;
-import java.util.Collections;
+import com.jiahongw.wantee.dto.tag.TagDTO;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.annotation.Resource;
-import org.springframework.util.CollectionUtils;
+import java.util.Map;
 
 /**
- * @author VictorHong
- * @date 2023/4/15
+ * @author Redisread
+ * @date 2023/5/14
  */
-public class TagService {
+public interface TagService {
 
-    @Resource
-    private TagPOMapper tagPOMapper;
+    void create(Integer userId,List<String> tagNameList);
 
-    public List<TagModel> queryTagListByName(Long creatorId, Set<String> nameSet) {
-        if (CollectionUtils.isEmpty(nameSet)) {
-            return Collections.emptyList();
-        }
-        List<TagPO> tagPOList = tagPOMapper.listTagByNames(creatorId, nameSet);
-        List<TagModel> tagModelList = tagPOList.stream()
-            .map(TagServiceConvert::convert2TagModel)
-            .collect(Collectors.toList());
-        return tagModelList;
-    }
+    void delete(Integer userId,List<String> tagNameList);
 
-    public List<TagModel> createTag(Long creatorId, Set<String> nameSet) {
-        List<TagPO> tagPOList = nameSet.stream()
-            .map(name -> TagServiceConvert.convertTagPO(creatorId, name))
-            .collect(Collectors.toList());
-        tagPOMapper.batchInsert(tagPOList);
-        List<TagModel> tagModelList = tagPOList.stream()
-            .map(TagServiceConvert::convert2TagModel)
-            .collect(Collectors.toList());
-        return tagModelList;
-    }
+    void update(Map<Integer,String> tagId2NameMap);
+
+    List<TagDTO> listByUser(Integer userId);
+
+    List<TagDTO> listByNames(Integer userId, List<String> nameList);
+
+    TagDTO getByName(Integer userId, String name);
 }

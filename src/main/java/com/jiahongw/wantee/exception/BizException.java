@@ -1,7 +1,7 @@
 package com.jiahongw.wantee.exception;
 
 import com.google.common.base.Joiner;
-import com.jiahongw.wantee.constant.enums.BizExceptionCodeEnum;
+import com.jiahongw.wantee.common.enums.BizExceptionCodeEnum;
 
 /**
  * 业务异常

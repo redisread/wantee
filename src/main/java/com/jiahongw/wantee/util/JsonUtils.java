@@ -23,7 +23,7 @@ public class JsonUtils {
     private static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss")
         .create();
 
-    private static JsonParser jsonParser = new JsonParser();
+    private static final JsonParser jsonParser = new JsonParser();
 
     public static String toJson(Object obj) {
         return GSON.toJson(obj);
@@ -65,7 +65,7 @@ public class JsonUtils {
      */
     private static class ParameterizedTypeImpl implements ParameterizedType {
 
-        private Type clazz;
+        private final Type clazz;
 
         public <T> ParameterizedTypeImpl(Class<T> clz) {
             clazz = clz;

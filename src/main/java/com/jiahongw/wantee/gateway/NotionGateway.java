@@ -1,6 +1,6 @@
 package com.jiahongw.wantee.gateway;
 
-import com.jiahongw.wantee.constant.enums.BizExceptionCodeEnum;
+import com.jiahongw.wantee.common.enums.BizExceptionCodeEnum;
 import com.jiahongw.wantee.exception.BizException;
 import java.util.Objects;
 import org.asynchttpclient.AsyncHttpClient;
