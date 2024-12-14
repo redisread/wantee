@@ -23,6 +23,60 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>build.buf.gen</groupId>
+      <artifactId>victorhong_notekeeper_bufbuild_validate-java</artifactId>
+      <version>1.1.0.1.20241214025816.dfa30cc83f8e</version>
+    </dependency>
+
+    <dependency>
+      <groupId>build.buf.gen</groupId>
+      <artifactId>victorhong_notekeeper_grpc_java</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>build.buf.gen</groupId>
+      <artifactId>victorhong_notekeeper_protocolbuffers_java</artifactId>
+    </dependency>
+
+
+<!--    <dependency>-->
+<!--      <groupId>org.springframework.boot</groupId>-->
+<!--      <artifactId>spring-boot-starter-actuator</artifactId>-->
+<!--    </dependency>-->
+
+<!--    &lt;!&ndash; gRPC &ndash;&gt;-->
+<!--    <dependency>-->
+<!--      <groupId>io.grpc</groupId>-->
+<!--      <artifactId>grpc-netty-shaded</artifactId>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>io.grpc</groupId>-->
+<!--      <artifactId>grpc-protobuf</artifactId>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>io.grpc</groupId>-->
+<!--      <artifactId>grpc-stub</artifactId>-->
+<!--    </dependency>-->
+    <dependency>
+      <groupId>io.grpc</groupId>
+      <artifactId>grpc-netty-shaded</artifactId>
+      <version>1.69.0</version> <!-- 根据需要调整版本 -->
+    </dependency>
+    <dependency>
+      <groupId>io.grpc</groupId>
+      <artifactId>grpc-core</artifactId>
+      <version>1.69.0</version> <!-- 根据需要调整版本 -->
+    </dependency>
+    <dependency>
+      <groupId>net.devh</groupId>
+      <artifactId>grpc-server-spring-boot-starter</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.notekeeper</groupId>
       <artifactId>note-keeper-client</artifactId>
       <version>0.0.1</version>
@@ -90,11 +144,6 @@
     <dependency>
       <groupId>com.alibaba</groupId>
       <artifactId>druid</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <scope>runtime</scope>
     </dependency>
   </dependencies>
 

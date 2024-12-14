@@ -13,16 +13,16 @@
   <description>A Spring Boot application for managing notes and integrating with Notion</description>
   <modules>
     <module>note-keeper-client</module>
-    <module>note-keeper-starter</module>
-    <module>note-keeper-infrastructure</module>
-    <module>note-keeper-application</module>
     <module>note-keeper-domain</module>
+    <module>note-keeper-application</module>
+    <module>note-keeper-infrastructure</module>
+    <module>note-keeper-starter</module>
   </modules>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.1.5</version>
+    <version>3.2.4</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -37,8 +37,73 @@
     <spring.boot.version>3.0.2</spring.boot.version>
   </properties>
 
+  <repositories>
+    <repository>
+      <name>Buf Maven Repository</name>
+      <id>buf</id>
+      <url>https://buf.build/gen/maven</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>build.buf.gen</groupId>
+        <artifactId>victorhong_notekeeper_bufbuild_validate-java</artifactId>
+        <version>1.1.0.1.20241214025816.dfa30cc83f8e</version>
+      </dependency>
+
+      <dependency>
+        <groupId>build.buf.gen</groupId>
+        <artifactId>victorhong_notekeeper_protocolbuffers_java</artifactId>
+        <version>29.1.0.1.20241214025816.dfa30cc83f8e</version>
+      </dependency>
+
+      <dependency>
+        <groupId>build.buf.gen</groupId>
+        <artifactId>victorhong_notekeeper_grpc_java</artifactId>
+        <version>1.69.0.1.20241214025816.dfa30cc83f8e</version>
+      </dependency>
+
+<!--      <dependency>-->
+<!--        <groupId>org.springframework.boot</groupId>-->
+<!--        <artifactId>spring-boot-starter-actuator</artifactId>-->
+<!--        <version>${spring.boot.version}</version>-->
+<!--      </dependency>-->
+
+      <!-- gRPC -->
+<!--      <dependency>-->
+<!--        <groupId>io.grpc</groupId>-->
+<!--        <artifactId>grpc-netty-shaded</artifactId>-->
+<!--        <version>1.40.0</version>-->
+<!--      </dependency>-->
+<!--      <dependency>-->
+<!--        <groupId>io.grpc</groupId>-->
+<!--        <artifactId>grpc-protobuf</artifactId>-->
+<!--        <version>1.40.0</version>-->
+<!--      </dependency>-->
+<!--      <dependency>-->
+<!--        <groupId>io.grpc</groupId>-->
+<!--        <artifactId>grpc-stub</artifactId>-->
+<!--        <version>1.40.0</version>-->
+<!--      </dependency>-->
+      <dependency>
+        <groupId>net.devh</groupId>
+        <artifactId>grpc-server-spring-boot-starter</artifactId>
+        <version>3.1.0.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.protobuf</groupId>
+        <artifactId>protobuf-java</artifactId>
+        <version>4.29.1</version>
+      </dependency>
+
       <dependency>
         <groupId>com.notekeeper</groupId>
         <artifactId>note-keeper-application</artifactId>
@@ -112,7 +177,6 @@
         <version>1.0</version>
       </dependency>
 
-
       <!--    重试框架依赖  3个 -->
       <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -173,10 +237,10 @@
       </dependency>
 
       <!--  webflux 响应式编程依赖  -->
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-webflux</artifactId>
-      </dependency>
+<!--      <dependency>-->
+<!--        <groupId>org.springframework.boot</groupId>-->
+<!--        <artifactId>spring-boot-starter-webflux</artifactId>-->
+<!--      </dependency>-->
 
       <!--    jol-core 依赖分析对象内存模型-->
       <dependency>
@@ -212,7 +276,7 @@
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
-        <version>31.1-jre</version>
+        <version>32.1.2-jre</version>
       </dependency>
 
       <!--    压缩和解压工具 -->
@@ -296,13 +360,44 @@
     </profiles>
 
   <build>
+    <extensions>
+      <extension>
+        <groupId>kr.motd.maven</groupId>
+        <artifactId>os-maven-plugin</artifactId>
+        <version>1.7.0</version>
+      </extension>
+    </extensions>
     <plugins>
+      <plugin>
+        <groupId>org.xolstice.maven.plugins</groupId>
+        <artifactId>protobuf-maven-plugin</artifactId>
+        <version>0.6.1</version>
+        <configuration>
+          <protoSourceRoot>${basedir}/src/main/resources</protoSourceRoot>
+          <protocArtifact>com.google.protobuf:protoc:3.19.2:exe:${os.detected.classifier}</protocArtifact>
+          <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.43.2:exe:${os.detected.classifier}</pluginArtifact>
+          <outputDirectory>src/main/java</outputDirectory>
+          <clearOutputDirectory>false</clearOutputDirectory>
+          <pluginId>grpc-java</pluginId>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>compile-custom</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
+          <excludes>
+            <exclude>**/*.proto</exclude>
+          </excludes>
         </configuration>
       </plugin>
       <plugin>
@@ -334,7 +429,7 @@
         <artifactId>mybatis-generator-maven-plugin</artifactId>
         <version>1.4.0</version>
         <configuration>
-          <configurationFile>note-keeper-starter/src/main/resources/generatorConfig.xml</configurationFile>
+          <configurationFile>note-keeper-infrastructure/src/main/resources/generatorConfig.xml</configurationFile>
           <verbose>true</verbose>
           <overwrite>true</overwrite>
         </configuration>
@@ -343,11 +438,13 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
+            <version>8.0.26</version>
           </dependency>
         </dependencies>
-
       </plugin>
+
     </plugins>
   </build>
+
 
 </project>
