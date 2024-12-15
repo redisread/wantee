@@ -30,7 +30,6 @@
     <dependency>
       <groupId>build.buf.gen</groupId>
       <artifactId>victorhong_notekeeper_bufbuild_validate-java</artifactId>
-      <version>1.1.0.1.20241214025816.dfa30cc83f8e</version>
     </dependency>
 
     <dependency>
