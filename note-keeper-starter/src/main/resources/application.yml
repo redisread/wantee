@@ -10,7 +10,7 @@ jasypt:
 
 grpc:
   server:
-    port: 9090
+    port: 9091
     inProcessName: grpc
 
 #spring.application.name: notekeeper-service-grpc
@@ -33,8 +33,8 @@ notion:
 
 mybatis:
   #  设置Mapper包路径
-  type-aliases-package: com.jiahongw.wantee.mapper
-  #  mapper-locations: mybatis/mapper/**/*.xml
+#  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.notekeeper.infrastructure.dal.model
   configuration:
     map-underscore-to-camel-case: true
     default-fetch-size: 100
